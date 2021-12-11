@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Repositories;
+use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Reply;
 use App\Models\User;
 use App\Repositories\Contracts\PostRepositoryInterface;
 
@@ -33,4 +35,11 @@ class PostRepository implements PostRepositoryInterface
 
         return $customerPost;
     }
+
+    public function deletePost($validated)
+    {
+        Post::where('id', $validated['post_id'])
+            ->update(['deleted_by' => $validated['deleted_by'],'deleted' => config('custom.deleted.yes')]);
+    }
+
 }

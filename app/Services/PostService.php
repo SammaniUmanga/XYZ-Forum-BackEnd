@@ -5,6 +5,7 @@ use App\Enums\ErrorCodes;
 use App\Repositories\Contracts\PostRepositoryInterface;
 use App\Services\Contracts\PostServiceInterface;
 use App\Traits\ApiResponser;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PostService implements PostServiceInterface
@@ -42,4 +43,19 @@ class PostService implements PostServiceInterface
         }
     }
 
+    public function deletePost($validated)
+    {
+        try {
+            //Maintain a deleted status in table. So when deleting that deleted status only updated(soft-delete)
+            //So we can view deleted posts as well - can view history
+            //Delete post.
+            $this->postRepository->deletePost($validated);
+            Log::info("PostService -> Post deleted Successfully");
+            return $this->respondSuccess('Post deleted Successfully');
+
+        } catch (Exception $e) {
+            Log::error($e);
+            return $this->respondInternalServerError('Could not load', ErrorCodes::NOT_FOUND);
+        }
+    }
 }

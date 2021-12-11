@@ -42,36 +42,31 @@ class UserService implements UserServiceInterface
 
     public function userSignUp($validated)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
-            try {
-                //encrypt user entered password
-                $validated['password'] = hash('sha256', $validated['password']);
+            //encrypt user entered password
+            $validated['password'] = hash('sha256', $validated['password']);
 
-                if($validated['user_type'] == config('custom.user_role.admin')) {
-                    //Admin sign up
-                    $this->userRepository->addAdmin($validated);
-                    Log::info("UserService -> Admin Successfully SignedUp!");
-                    DB::commit();
-                    return $this->respondSuccess('Admin signed up Successfully');
+            if($validated['user_type'] == config('custom.user_role.admin')) {
+                //Admin sign up
+                $this->userRepository->addAdmin($validated);
+                Log::info("UserService -> Admin Successfully SignedUp!");
+                DB::commit();
+                return $this->respondSuccess('Admin signed up Successfully');
 
-                } else if($validated['user_type'] == config('custom.user_role.customer')) {
-                    //Customer sign up
-                    $this->userRepository->addCustomer($validated);
-                    Log::info("UserService -> Customer Successfully SignedUp!");
-                    DB::commit();
-                    return $this->respondSuccess('Customer signed up Successfully');
+            } else if($validated['user_type'] == config('custom.user_role.customer')) {
+                //Customer sign up
+                $this->userRepository->addCustomer($validated);
+                Log::info("UserService -> Customer Successfully SignedUp!");
+                DB::commit();
+                return $this->respondSuccess('Customer signed up Successfully');
 
-                } else {
-                    DB::rollBack();
-                    return $this->respondInternalServerError('Wrong user type', ErrorCodes::VALIDATION_ERROR);
-                }
-            } catch (Exception $e) {
+            } else {
                 DB::rollBack();
-                return $this->respondInternalServerError('Cannot sign up', ErrorCodes::DB_TRANSACTION_ERROR);
+                return $this->respondInternalServerError('Wrong user type', ErrorCodes::VALIDATION_ERROR);
             }
-
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error($e);
             return $this->respondInternalServerError('Could not load', ErrorCodes::NOT_FOUND);
         }
