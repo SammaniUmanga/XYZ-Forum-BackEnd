@@ -6,6 +6,7 @@ use App\Services\Contracts\UserServiceInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Traits\ApiResponser;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UserService implements UserServiceInterface
@@ -39,4 +40,40 @@ class UserService implements UserServiceInterface
         }
     }
 
+    public function userSignUp($validated)
+    {
+        try {
+            DB::beginTransaction();
+            try {
+                //encrypt user entered password
+                $validated['password'] = hash('sha256', $validated['password']);
+
+                if($validated['user_type'] == config('custom.user_role.admin')) {
+                    //Admin sign up
+                    $this->userRepository->addAdmin($validated);
+                    Log::info("UserService -> Admin Successfully SignedUp!");
+                    DB::commit();
+                    return $this->respondSuccess('Admin signed up Successfully');
+
+                } else if($validated['user_type'] == config('custom.user_role.customer')) {
+                    //Customer sign up
+                    $this->userRepository->addCustomer($validated);
+                    Log::info("UserService -> Customer Successfully SignedUp!");
+                    DB::commit();
+                    return $this->respondSuccess('Customer signed up Successfully');
+
+                } else {
+                    DB::rollBack();
+                    return $this->respondInternalServerError('Wrong user type', ErrorCodes::VALIDATION_ERROR);
+                }
+            } catch (Exception $e) {
+                DB::rollBack();
+                return $this->respondInternalServerError('Cannot sign up', ErrorCodes::DB_TRANSACTION_ERROR);
+            }
+
+        } catch (Exception $e) {
+            Log::error($e);
+            return $this->respondInternalServerError('Could not load', ErrorCodes::NOT_FOUND);
+        }
+    }
 }

@@ -26,18 +26,22 @@ class SignUpRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|exists:admins,email|email',
-            'password' => ['required', 'required_with:password_confirmation', 'same:password_confirmation' ,Password::min(8)->letters(),new PasswordCheck()],
-            'password_confirmation' => 'required'
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'password' => ['required', 'required_with:password_confirmation', 'same:password_confirmation' ,Password::min(6)->letters(),new PasswordCheck()],
+            'password_confirmation' => 'required',
+            'user_type' => 'required|integer'
         ];
     }
 
     public function messages()
     {
         return [
+            'name.required'         => 'User name is required',
             'email.required'         => 'Email address is required',
             'email.exists'           => 'Invalid email address',
             'email.email'            => 'Invalid email address',
+            'user_type.required'     => 'User type is required'
         ];
     }
 }

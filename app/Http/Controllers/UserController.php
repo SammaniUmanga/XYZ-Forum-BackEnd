@@ -26,8 +26,8 @@ class UserController extends Controller
 
     public function register(SignUpRequest $request)
     {
-        return $validated = $request->validated();
-        return $this->adminService->staffMemberSignUp($validated);
+        $validated = $request->validated();
+        return $this->userService->userSignUp($validated);
     }
 
 }

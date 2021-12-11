@@ -12,4 +12,5 @@ class ErrorCodes
     const NOT_FOUND             = 2201;
     const ALREADY_EXISTS        = 2401;
     const INVALID_RECORD        = 2202;
+    const DB_TRANSACTION_ERROR  = 5000;
 }
