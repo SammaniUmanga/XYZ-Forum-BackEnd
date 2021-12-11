@@ -18,12 +18,14 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
+    //Login Admin, Customer
     public function login(SignInRequest $request)
     {
          $validated = $request->validated();
          return $this->userService->signIn($validated);
     }
 
+    //Register
     public function register(SignUpRequest $request)
     {
         $validated = $request->validated();

@@ -15,6 +15,7 @@ class AdminController extends Controller
         $this->adminService = $adminService;
     }
 
+    //Approve post
     public function approvePosts(ApprovePostRequest $request)
     {
         $validated = $request->validated();
