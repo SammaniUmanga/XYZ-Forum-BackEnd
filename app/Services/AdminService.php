@@ -23,7 +23,7 @@ class AdminService implements AdminServiceInterface
             //Update posts approval status
             $this->adminRepository->approvePosts($validated);
             return $this->respondSuccess("Successfully Approved!");
-            
+
         } catch (Exception $e) {
             Log::error($e);
             return $this->respondInternalServerError('Could not load', ErrorCodes::NOT_FOUND);
