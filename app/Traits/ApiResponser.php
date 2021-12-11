@@ -107,4 +107,10 @@ trait ApiResponser
             ], $statusCode, $headers
         );
     }
+
+    protected function respondInternalError($message = 'Internal Error', $errorCode)
+    {
+        return $this->respondError($message, 500, $errorCode);
+    }
+
 }

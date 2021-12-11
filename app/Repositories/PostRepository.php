@@ -42,4 +42,14 @@ class PostRepository implements PostRepositoryInterface
             ->update(['deleted_by' => $validated['deleted_by'],'deleted' => config('custom.deleted.yes')]);
     }
 
+    public function getOnePost($validated)
+    {
+        return Post::where('id', $validated['post_id'])->where('deleted', config('custom.deleted.no'))->first();
+    }
+
+    public function getAllPost()
+    {
+        return Post::where('deleted', config('custom.deleted.no'))->get();
+    }
+
 }

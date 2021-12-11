@@ -2,6 +2,7 @@
 
 namespace App\Services;
 use App\Enums\ErrorCodes;
+use App\Http\Resources\GetPostResource;
 use App\Repositories\Contracts\PostRepositoryInterface;
 use App\Services\Contracts\PostServiceInterface;
 use App\Traits\ApiResponser;
@@ -48,7 +49,6 @@ class PostService implements PostServiceInterface
         try {
             //Maintain a deleted status in table. So when deleting that deleted status only updated(soft-delete)
             //So we can view deleted posts as well - can view history
-            //Delete post.
             $this->postRepository->deletePost($validated);
             Log::info("PostService -> Post deleted Successfully");
             return $this->respondSuccess('Post deleted Successfully');
@@ -58,4 +58,46 @@ class PostService implements PostServiceInterface
             return $this->respondInternalServerError('Could not load', ErrorCodes::NOT_FOUND);
         }
     }
+
+    public function getPost($validated)
+    {
+        try {
+             $getPost = $this->postRepository->getOnePost($validated);
+             if (!empty($getPost)) {
+                 return $this->respondWithResource(new GetPostResource($getPost), "OK");
+             } else {
+                 return $this->respondInternalError('Records not found', ErrorCodes::NOT_FOUND);
+             }
+        } catch (Exception $e) {
+            Log::error($e);
+            return $this->respondInternalServerError('Could not load', ErrorCodes::NOT_FOUND);
+        }
+    }
+
+    public function getAllPost()
+    {
+        try {
+            $getAllPosts = $this->postRepository->getAllPost();
+            if (!empty($getAllPosts)) {
+                return $this->respondWithResource(new GetPostResource($getAllPosts), "OK");
+            } else {
+                return $this->respondInternalError('Records not found', ErrorCodes::NOT_FOUND);
+            }
+
+        } catch (Exception $e) {
+            Log::error($e);
+            return $this->respondInternalServerError('Could not load', ErrorCodes::NOT_FOUND);
+        }
+    }
+
+    public function searchPost($validated)
+    {
+        try {
+            return $validated;
+        } catch (Exception $e) {
+            Log::error($e);
+            return $this->respondInternalServerError('Could not load', ErrorCodes::NOT_FOUND);
+        }
+    }
+
 }
