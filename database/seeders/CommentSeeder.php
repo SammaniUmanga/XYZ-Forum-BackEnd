@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class AdminSeeder extends Seeder
+class CommentSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,13 +14,15 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('admins')->insert([
-            "user_id" => 1,
-            "admin_name" => "sammani",
-            "email" => "sammani@gmail.com",
+        DB::table('comments')->insert([
+            "post_id" => 1,
+            "commented_by" => 1,
+            "comment_description" => "This is test comment",
+            "deleted_by" => 0,
             "deleted" => 0,
             "created_at" => now(),
             "updated_at" => now(),
         ]);
+
     }
 }

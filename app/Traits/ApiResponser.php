@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Enums\ErrorCodes;
 use Exception;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 trait ApiResponser
 {
@@ -91,4 +92,19 @@ trait ApiResponser
         return $this->apiResponse(['success' => true, 'message' => $message]);
     }
 
+    protected function respondWithResource(
+        JsonResource $resource,
+                     $message = null,
+                     $statusCode = 200,
+                     $headers = []
+    )
+    {
+        return $this->apiResponse(
+            [
+                'success' => true,
+                'result' => $resource,
+                'message' => $message
+            ], $statusCode, $headers
+        );
+    }
 }
