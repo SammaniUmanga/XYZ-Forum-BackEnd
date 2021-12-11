@@ -36,11 +36,15 @@ Route::prefix('posts')->group(function () {
     Route::post('delete-posts', [PostController::class, 'deletePost']);
     Route::get('get-posts', [PostController::class, 'getPost']);
     Route::get('get-all-posts', [PostController::class, 'getAllPost']);
+
+    //not implemented yet
     Route::get('search-posts', [PostController::class, 'searchPost']);
 });
 
 Route::prefix('comments')->group(function () {
     Route::post('add-comment', [CommentController::class, 'addComment']);
+
+    //not implemented yet
     Route::post('reply-comment', [CommentController::class, 'addReply']);
     Route::get('get-comments', [CommentController::class, 'getComments']);
     Route::get('get-replies', [CommentController::class, 'getReplies']);
