@@ -2,6 +2,7 @@
 
 namespace App\Services;
 use App\Enums\ErrorCodes;
+use App\Http\Resources\SignInResource;
 use App\Services\Contracts\UserServiceInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Traits\ApiResponser;
@@ -29,7 +30,9 @@ class UserService implements UserServiceInterface
             //check whether user entered email & password are same as in the db
             if ($user->email == $validated['email'] && $user->password === $validated['password']) {
                 $this->userRepository->userLoginUpdate($validated['email']);
-                return $this->respondSuccess("Successfully logged!");
+                $data['email'] = $validated['email'];
+                $data['user_id'] = $user['id'];
+                return $this->respondWithResource(new SignInResource($data), "Successfully logged!");
             } else {
                 return $this->respondInternalServerError("Something went wrong", ErrorCodes::SERVER_ERROR);
             }
