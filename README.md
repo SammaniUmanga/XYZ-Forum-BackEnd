@@ -1,3 +1,36 @@
+## Back End Guid lines
+
+## Framework: 
+Laravel
+
+## pre-requisite: 
+composer, php
+
+## My versions:
+
+PHP: 7.4.19 (cli),  Laravel Framework: 8.75.0
+
+## How to run project:
+1)git clone and checkout to master branch
+
+2)add .env (add db name to your env file)
+
+3)add .htaccess
+
+4)run these commands ->   composer update,  composer require laravel/passport
+
+5)Run the migrations -> php artisan migrate
+
+6)Run -> php artisan key:generate
+
+7)Run -> php artisan db:seed
+
+8)Create virtual host on localhost
+
+9)Project can run
+
+##
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
